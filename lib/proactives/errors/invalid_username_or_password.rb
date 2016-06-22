@@ -1,2 +1,6 @@
-class Proactives::Errors::InvalidUsernameOrPassword < StandardError
+module Proactives
+  module Errors
+    class InvalidUsernameOrPassword < StandardError
+    end
+  end
 end

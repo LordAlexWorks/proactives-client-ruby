@@ -1,7 +1,7 @@
 class Proactives::Config
   attr_reader :config
 
-  def initialize(config = default_config)
+  def initialize(config = {})
     @config = config
   end
 

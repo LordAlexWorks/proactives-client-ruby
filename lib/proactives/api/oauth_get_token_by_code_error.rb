@@ -1,2 +1,6 @@
-class Proactives::Api::OauthGetTokenByCodeError < StandardError
+module Proactives
+  module Api
+    class OauthGetTokenByCodeError < StandardError
+    end
+  end
 end

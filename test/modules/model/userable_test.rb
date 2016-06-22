@@ -1,86 +1,86 @@
 require 'test_helper'
 
-class Proactives::Modules::Model::UserableTest < ActiveSupport::TestCase
+class Proactives::Modules::Model::UserableTest < Minitest::Test
   class DummyUserClass
     include Proactives::Modules::Model::Userable
   end
 
-  test '.create' do
+  def test_create
     proactives_user_api.stubs(:create).returns(attributes)
-    user = User.create(attributes[:id])
+    user = DummyUserClass.create(attributes[:id])
 
     assert user.id == attributes[:id]
   end
 
-  test '.create raises InvalidRegistrationParams' do
+  def test_create_raises_InvalidRegistrationParams
     proactives_user_api.stubs(:create)
                        .raises(Proactives::Api::InvalidParamsError)
 
-    assert_raise Proactives::Errors::InvalidRegistrationParams do
-      User.create(attributes[:id])
+    assert_raises Proactives::Errors::InvalidRegistrationParams do
+      DummyUserClass.create(attributes[:id])
     end
   end
 
-  test '.find_by' do
+  def test_find_by
     proactives_user_api.stubs(:find).returns(attributes)
-    user = User.find_by(attributes[:id])
+    user = DummyUserClass.find_by(attributes[:id])
 
     assert user.id == attributes[:id]
   end
 
-  test '.token by password' do
+  def test_token_by_password
     proactives_user_api.stubs(:token_by_password).returns('token')
-    token = User.token(username: 'username', password: 'password')
+    token = DummyUserClass.token(username: 'username', password: 'password')
 
     assert token == 'token'
   end
 
-  test '.token by password raises InvalidUsernameOrPassword' do
+  def test_token_by_password_raises_InvalidUsernameOrPassword
     proactives_user_api.stubs(:token_by_password)
                        .raises(Proactives::Api::OauthGetTokenByPasswordError)
 
-    assert_raise Proactives::Errors::InvalidUsernameOrPassword do
-      User.token(username: 'username', password: 'password')
+    assert_raises Proactives::Errors::InvalidUsernameOrPassword do
+      DummyUserClass.token(username: 'username', password: 'password')
     end
   end
 
-  test '.token by code' do
+  def test_token_by_code
     proactives_user_api.stubs(:token_by_code).returns('token')
-    token = User.token(code: 'code', redirect_uri: 'redirect_uri')
+    token = DummyUserClass.token(code: 'code', redirect_uri: 'redirect_uri')
 
     assert token == 'token'
   end
 
-  test '.token by code raises InvalidAuthorizationCode' do
+  def test_token_by_code_raises_InvalidAuthorizationCode
     proactives_user_api.stubs(:token_by_code)
                        .raises(Proactives::Api::OauthGetTokenByCodeError)
 
-    assert_raise Proactives::Errors::InvalidAuthorizationCode do
-      User.token(code: 'code', redirect_uri: 'redirect_uri')
+    assert_raises Proactives::Errors::InvalidAuthorizationCode do
+      DummyUserClass.token(code: 'code', redirect_uri: 'redirect_uri')
     end
   end
 
-  test '.send_reset_password_instructions' do
+  def test_send_reset_password_instructions
     proactives_user_api.stubs(:generate_new_password_email).returns(nil)
 
-    response = User.send_reset_password_instructions(email: 'test@test.com')
+    response = DummyUserClass.send_reset_password_instructions(email: 'test@test.com')
 
     assert_nil response
   end
 
-  test '.send_reset_password_instructions raises UserNotFound' do
+  def test_send_reset_password_instructions_raises_UserNotFound
     proactives_user_api.stubs(:generate_new_password_email)
                        .raises(Proactives::Api::NotFoundError, 'error')
 
-    assert_raise Proactives::Errors::UserNotFound, 'error' do
-      User.send_reset_password_instructions(email: 'test@test.com')
+    assert_raises Proactives::Errors::UserNotFound, 'error' do
+      DummyUserClass.send_reset_password_instructions(email: 'test@test.com')
     end
   end
 
-  test '#update_attributes is successful' do
+  def test_update_attributes_is_successful
     proactives_user_api.stubs(:update)
                        .returns(attributes.merge(username: 'newname'))
-    user = User.new(attributes)
+    user = DummyUserClass.new(attributes)
 
     result = user.update_attributes(username: 'newname')
 
@@ -88,29 +88,29 @@ class Proactives::Modules::Model::UserableTest < ActiveSupport::TestCase
     assert user.username == 'newname'
   end
 
-  test '#update_attributes is not successful' do
+  def test_update_attributes_is_not_successful
     proactives_user_api.stubs(:update)
                        .raises(Proactives::Api::InvalidParamsError, 'error')
-    user = User.new(attributes)
+    user = DummyUserClass.new(attributes)
 
     result = user.update_attributes(username: 'newname')
 
-    assert_not result
+    assert result == false
     assert user.errors.to_a.include? 'error'
   end
 
-  test '#username' do
-    user = User.new(attributes)
+  def test_username
+    user = DummyUserClass.new(attributes)
     assert user.username == attributes[:username]
   end
 
-  test '#id' do
-    user = User.new(attributes)
+  def test_id
+    user = DummyUserClass.new(attributes)
     assert user.id == attributes[:id]
   end
 
-  test '#email' do
-    user = User.new(attributes)
+  def test_email
+    user = DummyUserClass.new(attributes)
     assert user.email == attributes[:email]
   end
 

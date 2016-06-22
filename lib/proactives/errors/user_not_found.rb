@@ -1,2 +1,6 @@
-class Proactives::Errors::UserNotFound < StandardError
+module Proactives
+  module Errors
+    class UserNotFound < StandardError
+    end
+  end
 end

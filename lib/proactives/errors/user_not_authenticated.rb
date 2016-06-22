@@ -1,2 +1,6 @@
-class Proactives::Errors::UserNotAuthenticated < StandardError
+module Proactives
+  module Errors
+    class UserNotAuthenticated < StandardError
+    end
+  end
 end

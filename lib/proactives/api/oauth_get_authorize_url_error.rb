@@ -1,2 +1,6 @@
-class Proactives::Api::OauthGetAuthorizeUrlError < StandardError
+module Proactives
+  module Api
+    class OauthGetAuthorizeUrlError < StandardError
+    end
+  end
 end

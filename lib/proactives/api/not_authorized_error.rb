@@ -1,2 +1,6 @@
-class Proactives::Api::NotAuthorizedError < StandardError
+module Proactives
+  module Api
+    class NotAuthorizedError < StandardError
+    end
+  end
 end

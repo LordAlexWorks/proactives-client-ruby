@@ -1,7 +1,7 @@
 require 'test_helper'
 
-class Proactives::Api::ProactivesUserTest < ActiveSupport::TestCase
-  test '.update when success' do
+class Proactives::Api::ProactivesUserTest < Minitest::Test
+  def test_update_when_success
     http_client = mock('http_client')
     http_client.expects(:patch).returns(http_client_response)
 
@@ -13,45 +13,45 @@ class Proactives::Api::ProactivesUserTest < ActiveSupport::TestCase
     assert response, user_params
   end
 
-  test '.update when status 422 raises InvalidParamsError' do
+  def test_update_when_status_422_raises_InvalidParamsError
     http_client = mock('http_client')
     response = http_client_response(
       body: { 'error' => 'Error' }, status: 422, success: false
     )
     http_client.expects(:patch).returns(response)
 
-    assert_raise Proactives::Api::InvalidParamsError do
+    assert_raises Proactives::Api::InvalidParamsError do
       response = Proactives::Api::ProactivesUser.update(
         { access_token: 'access_token', id: 123 }, http_client: http_client
       )
     end
   end
 
-  test '.update when status 403 raises NotAuthorizedError' do
+  def test_update_when_status_403_raises_NotAuthorizedError
     http_client = mock('http_client')
     response = http_client_response(body: '', status: 403, success: false)
     http_client.expects(:patch).returns(response)
 
-    assert_raise Proactives::Api::NotAuthorizedError do
+    assert_raises Proactives::Api::NotAuthorizedError do
       response = Proactives::Api::ProactivesUser.update(
         { access_token: 'access_token', id: 123 }, http_client: http_client
       )
     end
   end
 
-  test '.update when status 401 raises InvalidTokenError' do
+  def test_update_when_status_401_raises_InvalidTokenError
     http_client = mock('http_client')
     response = http_client_response(body: '', status: 401, success: false)
     http_client.expects(:patch).returns(response)
 
-    assert_raise Proactives::Api::InvalidTokenError do
+    assert_raises Proactives::Api::InvalidTokenError do
       response = Proactives::Api::ProactivesUser.update(
         { access_token: 'access_token', id: 123 }, http_client: http_client
       )
     end
   end
 
-  test '.create when success' do
+  def test_create_when_success
     http_client = mock('http_client')
     http_client.expects(:post).returns(http_client_response(status: 201))
 
@@ -60,39 +60,39 @@ class Proactives::Api::ProactivesUserTest < ActiveSupport::TestCase
     assert response, user_params
   end
 
-  test '.create when status 422 raises InvalidParamsError' do
+  def test_create_when_status_422_raises_InvalidParamsError
     http_client = mock('http_client')
     response = http_client_response(
       body: { 'error' => 'Error' }, status: 422, success: false
     )
     http_client.expects(:post).returns(response)
 
-    assert_raise Proactives::Api::InvalidParamsError do
+    assert_raises Proactives::Api::InvalidParamsError do
       response = Proactives::Api::ProactivesUser.create(http_client: http_client)
     end
   end
 
-  test '.create when status 403 raises NotAuthorizedError' do
+  def test_create_when_status_403_raises_NotAuthorizedError
     http_client = mock('http_client')
     response = http_client_response(body: '', status: 403, success: false)
     http_client.expects(:post).returns(response)
 
-    assert_raise Proactives::Api::NotAuthorizedError do
+    assert_raises Proactives::Api::NotAuthorizedError do
       response = Proactives::Api::ProactivesUser.create(http_client: http_client)
     end
   end
 
-  test '.create when status 401 raises InvalidTokenError' do
+  def test_create_when_status_401_raises_InvalidTokenError
     http_client = mock('http_client')
     response = http_client_response(body: '', status: 401, success: false)
     http_client.expects(:post).returns(response)
 
-    assert_raise Proactives::Api::InvalidTokenError do
+    assert_raises Proactives::Api::InvalidTokenError do
       response = Proactives::Api::ProactivesUser.create(http_client: http_client)
     end
   end
 
-  test '.find when success' do
+  def test_find_when_success
     http_client = mock('http_client')
     http_client.expects(:get).returns(http_client_response)
 
@@ -101,17 +101,17 @@ class Proactives::Api::ProactivesUserTest < ActiveSupport::TestCase
     assert response, user_params
   end
 
-  test '.find when access token is nil raises InvalidTokenError' do
+  def test_find_when_access_token_is_nil_raises_InvalidTokenError
     http_client = mock('http_client')
     response = http_client_response(body: '', status: 401, success: false)
     http_client.expects(:get).returns(response)
 
-    assert_raise Proactives::Api::InvalidTokenError do
+    assert_raises Proactives::Api::InvalidTokenError do
       Proactives::Api::ProactivesUser.find(nil, http_client: http_client)
     end
   end
 
-  test '.token_by_password when success' do
+  def test_token_by_password_when_success
     token_provider = mock('token_provider')
     token_provider.stubs(:token_by_password)
                   .with('username', 'password').returns('token')
@@ -122,19 +122,19 @@ class Proactives::Api::ProactivesUserTest < ActiveSupport::TestCase
     assert token, 'token'
   end
 
-  test '.token_by_password when failure raises OauthGetTokenByPasswordError' do
+  def test_token_by_password_when_failure_raises_OauthGetTokenByPasswordError
     token_provider = mock('token_provider')
     token_provider.stubs(:token_by_password)
                   .with('username', 'password')
                   .raises(Proactives::Api::OauthGetTokenByPasswordError)
 
-    assert_raise Proactives::Api::OauthGetTokenByPasswordError do
+    assert_raises Proactives::Api::OauthGetTokenByPasswordError do
       Proactives::Api::ProactivesUser.token_by_password('username', 'password',
                                               token_provider: token_provider)
     end
   end
 
-  test '.token_by_code when success' do
+  def test_token_by_code_when_success
     token_provider = mock('token_provider')
     token_provider.stubs(:token_by_code).with('code', 'redirect_uri')
                   .returns('token')
@@ -145,18 +145,18 @@ class Proactives::Api::ProactivesUserTest < ActiveSupport::TestCase
     assert token, 'token'
   end
 
-  test '.token_by_code when failure raises OauthGetTokenByCodeError' do
+  def test_token_by_code_when_failure_raises_OauthGetTokenByCodeError
     token_provider = mock('token_provider')
     token_provider.stubs(:token_by_code).with('code', 'redirect_uri')
                   .raises(Proactives::Api::OauthGetTokenByCodeError)
 
-    assert_raise Proactives::Api::OauthGetTokenByCodeError do
+    assert_raises Proactives::Api::OauthGetTokenByCodeError do
       Proactives::Api::ProactivesUser.token_by_code('code', 'redirect_uri',
                                                     token_provider: token_provider)
     end
   end
 
-  test '.authorize_url when success' do
+  def test_authorize_url_when_success
     oauth_provider = mock('oauth_provider')
     oauth_provider.stubs(:authorize_url).returns('url')
 
@@ -166,18 +166,18 @@ class Proactives::Api::ProactivesUserTest < ActiveSupport::TestCase
     assert url, 'url'
   end
 
-  test '.authorize_url when failure raises OauthGetAuthorizeUrlError' do
+  def test_authorize_url_when_failure_raises_OauthGetAuthorizeUrlError
     oauth_provider = mock('oauth_provider')
     oauth_provider.stubs(:authorize_url)
                   .raises(Proactives::Api::OauthGetAuthorizeUrlError)
 
-    assert_raise Proactives::Api::OauthGetAuthorizeUrlError do
+    assert_raises Proactives::Api::OauthGetAuthorizeUrlError do
       Proactives::Api::ProactivesUser.authorize_url('redirect_uri',
                                           oauth_provider: oauth_provider)
     end
   end
 
-  test '.generate_new_password_email when success' do
+  def test_generate_new_password_email_when_success
     http_client = mock('http_client')
     http_client.expects(:post).returns(http_client_response(status: 200))
 
@@ -188,37 +188,37 @@ class Proactives::Api::ProactivesUserTest < ActiveSupport::TestCase
     assert_nil response
   end
 
-  test '.generate_new_password_email when status 404 raises NotFoundError' do
+  def test_generate_new_password_email_when_status_404_raises_NotFoundError
     http_client = mock('http_client')
     response = http_client_response(body: { error: 'error' },
                                     status: 404, success: false)
     http_client.expects(:post).returns(response)
 
-    assert_raise Proactives::Api::NotFoundError do
+    assert_raises Proactives::Api::NotFoundError do
       response = Proactives::Api::ProactivesUser.generate_new_password_email(
         { email: 'test@test.com' }, http_client: http_client
       )
     end
   end
 
-  test '.generate_new_password_email when status 403 raises NotAuthorizedError' do
+  def test_generate_new_password_email_when_status_403_raises_NotAuthorizedError
     http_client = mock('http_client')
     response = http_client_response(body: '', status: 403, success: false)
     http_client.expects(:post).returns(response)
 
-    assert_raise Proactives::Api::NotAuthorizedError do
+    assert_raises Proactives::Api::NotAuthorizedError do
       response = Proactives::Api::ProactivesUser.generate_new_password_email(
         { email: 'test@test.com' }, http_client: http_client
       )
     end
   end
 
-  test '.generate_new_password_email when status 401 raises InvalidTokenError' do
+  def test_generate_new_password_email_when_status_401_raises_InvalidTokenError
     http_client = mock('http_client')
     response = http_client_response(body: '', status: 401, success: false)
     http_client.expects(:post).returns(response)
 
-    assert_raise Proactives::Api::InvalidTokenError do
+    assert_raises Proactives::Api::InvalidTokenError do
       response = Proactives::Api::ProactivesUser.generate_new_password_email(
         { email: 'test@test.com' }, http_client: http_client
       )

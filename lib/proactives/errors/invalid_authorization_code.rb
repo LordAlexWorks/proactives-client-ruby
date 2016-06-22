@@ -1,2 +1,6 @@
-class Proactives::Errors::InvalidAuthorizationCode < StandardError
+module Proactives
+  module Errors
+    class InvalidAuthorizationCode < StandardError
+    end
+  end
 end

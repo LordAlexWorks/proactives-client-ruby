@@ -1,2 +1,6 @@
-class Proactives::Api::InvalidTokenError < StandardError
+module Proactives
+  module Api
+    class InvalidTokenError < StandardError
+    end
+  end
 end
