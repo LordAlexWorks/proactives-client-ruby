@@ -18,11 +18,9 @@ Gem::Specification.new do |spec|
   spec.test_files    = `git ls-files -- test/*`.split("\n")
   spec.require_paths = ['lib']
 
-  spec.add_development_dependency 'bundler', '~> 1.12'
-  spec.add_development_dependency 'rake', '~> 10.0'
   spec.add_development_dependency 'minitest', '~> 5.0'
   spec.add_development_dependency 'mocha', '~> 1.0'
-  spec.add_runtime_dependency 'oauth2', '~> 1.0'
-  spec.add_runtime_dependency 'faraday', '~> 0.9.2'
-  spec.add_runtime_dependency 'activemodel', '~> 4.0', '>= 4.0.0'
+  spec.add_dependency 'oauth2', '~> 1.0'
+  spec.add_dependency 'faraday', '~> 0.9.2'
+  spec.add_dependency 'activemodel', '~> 5.0'
 end

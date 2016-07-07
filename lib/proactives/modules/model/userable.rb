@@ -1,3 +1,5 @@
+require 'active_model'
+
 module Proactives
   module Modules
     module Model
